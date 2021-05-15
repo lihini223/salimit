@@ -23,10 +23,21 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
-    console.log('New request');
+    console.log('New request to /');
+    res.send('Received');
+});
+
+app.get('/saline-status', (req, res) => {
+    const { wardNo, bedNo, status, deviceId } = req.query;
+    console.log('New request to saline');
     console.log(req.url);
-    console.log(req.query.info);
-    res.send('Hello from the backend');
+    console.log(wardNo);
+    console.log(bedNo);
+    console.log(status);
+    console.log(typeof wardNo);
+    console.log(typeof bedNo);
+    console.log(typeof status);
+    res.send('Success');
 });
 
 //const { getAdmins, addAdmin } = require('./test/db');

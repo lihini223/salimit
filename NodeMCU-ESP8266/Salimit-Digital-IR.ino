@@ -9,6 +9,7 @@ const char* host = "";
 // server port
 const int httpPort = 8081;
 
+const char* deviceId = "";
 const char* wardNo = "W10";
 const char* bedNo = "B20";
 
@@ -24,11 +25,11 @@ void setup() {
   
   Serial.begin(9600);
 
-  Serial.println("Connecting to " + ssid);
+  Serial.println("Connecting to " + String(ssid));
 
   WiFi.begin(ssid, password);
 
-  while(WiFi.status() != WL_CONNECTED){
+  while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
@@ -46,37 +47,42 @@ void loop() {
 
   Serial.println(sensorInputValue);
 
+  String salineLevelStatus = "";
+
   if (sensorInputValue == HIGH) {
     Serial.println("HIGH");
     digitalWrite(LED_BUILTIN, HIGH);
-    sendDataToServer("normal");
+    salineLevelStatus = "normal";
   } else {
     Serial.println("LOW");
     digitalWrite(LED_BUILTIN, LOW);
-    sendDataToServer("reached");
+    salineLevelStatus = "reached";
   }
+
+  sendSalineStatus(salineLevelStatus);
 
   // run loop every 5 seconds
   delay(5000);
 }
 
-void sendDataToServer(String salineLevelStatus) {
-  Serial.println("Connecting to " + host);
+void sendSalineStatus(String salineLevelStatus) {
+  Serial.println("Connecting to " + String(host));
 
   WiFiClient client;
   
-  if(!client.connect(host, httpPort)){
+  if (!client.connect(host, httpPort)) {
     Serial.println("Connection failed");
     return;
   }
 
   //String data = String(wardNo) + String(bedNo);
-  String url = "/?wardNo=" + String(wardNo) + "&bedNo=" + String(bedNo) + "&status=" + salineLevelStatus;
+  String url = "/saline-status";
+  String data = "?wardNo=" + String(wardNo) + "&bedNo=" + String(bedNo) + "&status=" + salineLevelStatus;
 
-  Serial.println("Requesting URL: " + url);
+  Serial.println("Requesting URL: " + url + data);
 
   Serial.println("Requesting GET: ");
-  client.print(String("GET ") + url + " HTTP/1.1\r\n" +"Connection: close\r\n\r\n");
+  client.print(String("GET ") + url + data + " HTTP/1.1\r\n" +"Connection: close\r\n\r\n");
            
   unsigned long timeout = millis();
   while (client.available() == 0) {
@@ -88,10 +94,11 @@ void sendDataToServer(String salineLevelStatus) {
   }
 
   // read response from server and print
-  while(client.available()){
+  while (client.available()) {
     String line = client.readStringUntil('\r');
     Serial.print(line);
   }
 
+  Serial.println();
   Serial.println("Closing connection");
 }
