@@ -30,6 +30,7 @@
                     <a href="index.html" class="brand-logo"><i class="material-icons">local_hospital</i>Salimit</a>
                     <ul class="right hide-on-med-and-down">
                         <li><a href="current-salines.html">Current Salines</a></li>
+                        <li><a href="select-ward.html">Select Ward</a></li>
                         <li><a href="add-saline.html">Add Saline</a></li>
                         <li><a href="add-device.html">Add Device</a></li>
                         <li><a href="add-patient.html">Add Patient</a></li>
@@ -38,9 +39,43 @@
             </nav>
         </header>
 
-        <form id="addPatientForm">
-
-        </form>
+        <div class="row">
+            <form id="addPatientForm" class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="text" name="patientId" id="patientId" class="validate">
+                        <label for="patientId">ID</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="text" name="patientName" id="patientName" class="validate">
+                        <label for="patientName">Name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <select name="wardNo">
+                            <option value="" disabled selected>Select Ward No</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                        <label>Ward No</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <select name="bedNo">
+                            <option value="" disabled selected>Select Bed No</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                        <label>Bed No</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn waves-effect waves-light">Add Patient<i class="material-icons right">send</i></button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

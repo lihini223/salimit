@@ -6,6 +6,8 @@ function websocketServer(io) {
         
         const wardNo = socket.handshake.query.wardNo;
 
+        console.log(wardNo);
+
         socket.join(wardNo);
     });
 }

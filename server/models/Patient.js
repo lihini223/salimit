@@ -23,10 +23,12 @@ const PatientSchema = mongoose.Schema({
         default: false
     },
     deviceId: {
-        type: String
+        type: String,
+        default: null
     },
     salineStatus: {
-        type: String
+        type: String,
+        default: null
     }
 });
 

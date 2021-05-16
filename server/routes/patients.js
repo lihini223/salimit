@@ -23,6 +23,9 @@ router.post('/new', async (req, res) => {
     const { patientId, name, wardNo, bedNo } = req.body;
 
     try {
+        const existingPatient = await Patient.findOne({ wardNo, bedNo, discharged: false });
+        if (existingPatient) return res.json({ status: 'error', message: 'Bed is already taken' });
+        
         const patient = new Patient({
             patientId,
             name,
@@ -35,7 +38,7 @@ router.post('/new', async (req, res) => {
         res.json({ status: 'success', patient: newPatient });
     } catch (err) {
         console.log(err);
-        res.json({ status: 'error' });
+        res.json({ status: 'error', message: 'Internal error' });
     }
 });
 
