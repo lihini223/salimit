@@ -49,7 +49,9 @@ const io = socketio(server, {
     }
 });
 
-app.get('/saline-status', (req, res) => {
+require('./websocket-server').websocketServer(io);
+
+/* app.get('/saline-status', (req, res) => {
     const { wardNo, bedNo, status, deviceId } = req.query;
     console.log('New request to saline');
     console.log(req.url);
@@ -60,7 +62,7 @@ app.get('/saline-status', (req, res) => {
     console.log(typeof bedNo);
     console.log(typeof status);
     res.send('Success');
-});
+}); */
 
 const PORT = process.env.PORT || 8081;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

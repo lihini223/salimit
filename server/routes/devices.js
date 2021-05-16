@@ -1,6 +1,8 @@
 const express = require('express');
 
 const SalimitDevice = require('../models/SalimitDevice');
+const Patient = require('../models/Patient');
+const { emitSalineStatus } = require('../websocket-server');
 
 const router = express.Router();
 
@@ -21,16 +23,19 @@ router.post('/new', async (req, res) => {
     }
 });
 
-router.get('/saline-status', (req, res) => {
-    const { wardNo, bedNo, status, deviceId } = req.query;
-    console.log('New request from device');
-    console.log(req.url);
-    console.log(wardNo);
-    console.log(bedNo);
-    console.log(status);
-    console.log(typeof wardNo);
-    console.log(typeof bedNo);
-    console.log(typeof status);
+router.get('/saline-status', async (req, res) => {
+    const { wardNo, bedNo, salineStatus, deviceId } = req.query;
+    
+    try {
+        const patient = await Patient.findOne({ deviceId });
+
+        const updatedPatient = await Patient.findOneAndUpdate({ deviceId }, { salineStatus: salineStatus });
+
+        emitSalineStatus(patient);
+    } catch (err) {
+        console.log(err);
+    }
+
     res.send('Success');
 });
 
