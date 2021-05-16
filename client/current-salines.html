@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
+    <script src="./js/current-salines.js" defer></script>
+    <title>Salimit</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <div class="nav-wrapper">
+                    <a href="index.html" class="brand-logo"><i class="material-icons">local_hospital</i>Salimit</a>
+                    <ul class="right hide-on-med-and-down">
+                        <li><a href="current-salines.html">Current Salines</a></li>
+                        <li><a href="add-saline.html">Add Saline</a></li>
+                        <li><a href="add-device.html">Add Device</a></li>
+                        <li><a href="add-patient.html">Add Patient</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <form id="wardSelectForm">
+            <div class="input-field col s12">
+                <select name="wardNo" id="wardSelect">
+                    <option value="" disabled selected>Select Ward No</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+                <label>Select Ward No</label>
+            </div>
+        </form>
+
+        <div id="addPatientModal" class="modal">
+            <div class="modal-content">
+                <h4>Add Patient</h4>
+
+                <form action="addPatientForm">
+                    <button onclick="addPatient(this)">Add</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

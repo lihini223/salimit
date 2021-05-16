@@ -34,10 +34,12 @@ app.get('/', (req, res) => {
 // import route handlers
 const devicesRouter = require('./routes/devices');
 const salinesRouter = require('./routes/salines');
+const patientsRouter = require('./routes/patients');
 
 // use route handlers
 app.use('/devices', devicesRouter);
 app.use('/salines', salinesRouter);
+app.use('/patients', patientsRouter);
 
 //const { getAdmins, addAdmin } = require('./test/db');
 

@@ -1,4 +1,4 @@
-const Patient = require('../models/Patient');
+const Patient = require('./models/Patient');
 
 function websocketServer(io) {
     io.on('connection', socket => {

@@ -6,7 +6,7 @@ const Saline = require('../models/Saline');
 
 const router = express.Router();
 
-router.get('/:wardNo', (req, res) => {
+router.get('/:wardNo', async (req, res) => {
     const wardNo = req.params.wardNo;
 
     try {
