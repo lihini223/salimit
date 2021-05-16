@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
 
+// import modules and packages
 const http = require('http');
 const express = require('express');
 const cors = require('cors');
@@ -10,6 +11,7 @@ const socketio = require('socket.io');
 
 const app = express();
 
+// database connection
 const MONGODB_URI = process.env.MONGODB_URI;
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
@@ -19,12 +21,32 @@ mongoose.connect(MONGODB_URI, {
 }).then(() => console.log('Connected to MongoDB'))
     .catch(err => console.log(err));
 
+// middleware
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.get('/', (req, res) => {
     console.log('New request to /');
     res.send('Received');
+});
+
+// import route handlers
+const devicesRouter = require('./routes/devices');
+const salinesRouter = require('./routes/salines');
+
+// use route handlers
+app.use('/devices', devicesRouter);
+app.use('/salines', salinesRouter);
+
+//const { getAdmins, addAdmin } = require('./test/db');
+
+const server = http.createServer(app);
+
+const io = socketio(server, {
+    cors: {
+        origin: '*'
+    }
 });
 
 app.get('/saline-status', (req, res) => {
@@ -38,16 +60,6 @@ app.get('/saline-status', (req, res) => {
     console.log(typeof bedNo);
     console.log(typeof status);
     res.send('Success');
-});
-
-//const { getAdmins, addAdmin } = require('./test/db');
-
-const server = http.createServer(app);
-
-const io = socketio(server, {
-    cors: {
-        origin: '*'
-    }
 });
 
 const PORT = process.env.PORT || 8081;
