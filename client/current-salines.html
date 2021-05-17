@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
+    <script src="https://cdn.socket.io/4.1.1/socket.io.min.js" integrity="sha384-cdrFIqe3RasCMNE0jeFG9xJHog/tgOVC1E9Lzve8LQN1g5WUHo0Kvk1mawWjxX7a" crossorigin="anonymous"></script>
+    <script src="./js/current-salines.js" defer></script>
+    <title>Salimit</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <div class="nav-wrapper">
+                    <a href="index.html" class="brand-logo"><i class="material-icons">local_hospital</i>Salimit</a>
+                    <ul class="right hide-on-med-and-down">
+                        <li><a href="current-salines.html">Current Salines</a></li>
+                        <li><a href="select-ward.html">Select Ward</a></li>
+                        <li><a href="add-saline.html">Add Saline</a></li>
+                        <li><a href="add-device.html">Add Device</a></li>
+                        <li><a href="add-patient.html">Add Patient</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <div id="patients"></div>
+    </div>
+</body>
+</html>
