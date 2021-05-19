@@ -3,9 +3,11 @@ const express = require('express');
 const Patient = require('../models/Patient');
 const SalimitDevice = require('../models/SalimitDevice');
 const Saline = require('../models/Saline');
+const { emitSalineStatus } = require('../websocket-server');
 
 const router = express.Router();
 
+// get all patients by ward no
 router.get('/:wardNo', async (req, res) => {
     const wardNo = req.params.wardNo;
 
@@ -19,6 +21,7 @@ router.get('/:wardNo', async (req, res) => {
     }
 });
 
+// add new patient
 router.post('/new', async (req, res) => {
     const { patientId, name, wardNo, bedNo } = req.body;
 
@@ -42,6 +45,7 @@ router.post('/new', async (req, res) => {
     }
 });
 
+// get patient by id
 router.get('/:id', async (req, res) => {
     const patientId = req.params.id;
 
@@ -67,6 +71,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// add saline to patient
 router.post('/add-saline', async (req, res) => {
     const { wardNo, bedNo, salineId, deviceId } = req.body;
 
@@ -75,7 +80,9 @@ router.post('/add-saline', async (req, res) => {
         if (!patient) return res.json({ status: 'error', message: 'Invalid patient' });
 
         const salimitDevice = await SalimitDevice.findOne({ deviceId });
+        if (!salimitDevice) return res.json({ status: 'error', message: 'Invalid device' });
         if (salimitDevice.inUse) return res.json({ status: 'error', message: 'Salimit device already in use' });
+        console.log(salimitDevice);
 
         const saline = await Saline.findById(salineId);
         if (!saline) return res.json({ status: 'error', message: 'Invalid saline' });
@@ -83,24 +90,35 @@ router.post('/add-saline', async (req, res) => {
         const salineDetails = {
             action: 'give',
             salineId: saline._id,
-            dateTime: new Date.now()
+            dateTime: Date.now()
         };
 
-        const updatedPatient = await Patient.updateOne({ _id: patient._id },
+        /*const updatedPatient = await Patient.updateOne({ _id: patient._id },
             { $push: { salineHistory: salineDetails },
             deviceId,
             salineStatus: 'normal'
-        });
+        });*/
+
+        patient.salineHistory.push(salineDetails);
+        patient.deviceId = deviceId;
+        patient.salineStatus = 'normal';
+
+        patient.save();
+
+        //patient = await Patient.findOne({ wardNo, bedNo, discharged: false });
+
+        emitSalineStatus(io, patient);
         
         const updatedSalimitDevice = await SalimitDevice.findOneAndUpdate({ deviceId }, { inUse: true });
 
-        res.json({ status: 'success', patient: updatedPatient });
+        res.json({ status: 'success', patient });
     } catch (err) {
         console.log(err);
         res.json({ status: 'error' });
     }
 });
 
+// remove saline from patient
 router.get('/remove-saline/:id', async (req, res) => {
     const patientId = req.params.id;
 
@@ -110,24 +128,35 @@ router.get('/remove-saline/:id', async (req, res) => {
 
         const salineDetails = {
             action: 'remove',
-            dateTime: new Date.now()
+            dateTime: Date.now()
         };
 
-        const updatedPatient = await Patient.updateOne({ patientId },
+        /*const updatedPatient = await Patient.updateOne({ patientId },
             { $push: { salineHistory: salineDetails },
             deviceId: null,
             salineStatus: null
-        });
+        });*/
 
-        const device = await SalimitDevice.findOneAndUpdate({ deviceId: patient.deviceId }, { inUse: false });
+        patient.salineHistory.push(salineDetails);
+        patient.deviceId = null;
+        patient.salineStatus = null;
 
-        res.json({ status: 'success', patient: updatedPatient });
+        patient.save();
+
+        //patient = await Patient.findOne({ wardNo, bedNo, discharged: false });
+
+        emitSalineStatus(patient);
+
+        const updatedSalimitDevice = await SalimitDevice.findOneAndUpdate({ deviceId: patient.deviceId }, { inUse: false });
+
+        res.json({ status: 'success', patient });
     } catch (err) {
         console.log(err);
         res.json({ status: 'error' });
     }
 });
 
+// discharge patient
 router.get('/discharge/:id', async (req, res) => {
     const patientId = req.params.id;
 
