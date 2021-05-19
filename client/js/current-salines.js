@@ -35,6 +35,8 @@ socket.on('saline-status', patient => {
     changePatientSalineStatus(patient);
 });
 
+socket.on('ss', data => console.log(data));
+
 function createPatientCards(patients) {
     patientsElement.innerHTML = '';
 
@@ -42,12 +44,15 @@ function createPatientCards(patients) {
         const patientCard = document.createElement('div');
         patientCard.setAttribute('id', patient.patientId);
 
+        console.log(typeof patient.patientId);
+
         patientCard.innerHTML = `
             <div class="row">
                 <div class="col s12">
                     <div class="card blue">
                         <p>Bed No: ${patient.bedNo}</p>
                         <p class="saline-status">Saline Status: ${patient.salineStatus ? patient.salineStatus : 'No saline given'}</p>
+                        ${patient.salineStatus ? `<button type="button" class="btn" onclick="removeSaline('${patient.patientId}')">Remove Saline</button>` : ''}
                     </div>
                 </div>
             </div>
@@ -80,13 +85,21 @@ async function addSaline() {
         deviceId
     };
 
-    const res = await fetch(`${API_URL}/patients/add-saline`, {
+    const res = await fetch(`${API_URL}/add-saline`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(details)
     });
+
+    const data = await res.json();
+
+    console.log(data);
+}
+
+async function removeSaline(patientId) {
+    const res = await fetch(`${API_URL}/remove-saline/${patientId}`);
 
     const data = await res.json();
 

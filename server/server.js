@@ -9,6 +9,10 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const socketio = require('socket.io');
 
+const Patient = require('./models/Patient');
+const SalimitDevice = require('./models/SalimitDevice');
+const Saline = require('./models/Saline');
+
 const app = express();
 
 // database connection
@@ -43,6 +47,90 @@ app.use('/patients', patientsRouter);
 
 //const { getAdmins, addAdmin } = require('./test/db');
 
+// add saline to patient
+app.post('/add-saline', async (req, res) => {
+    const { wardNo, bedNo, salineId, deviceId } = req.body;
+
+    try {
+        const patient = await Patient.findOne({ wardNo, bedNo, discharged: false });
+        if (!patient) return res.json({ status: 'error', message: 'Invalid patient' });
+
+        const salimitDevice = await SalimitDevice.findOne({ deviceId });
+        if (!salimitDevice) return res.json({ status: 'error', message: 'Invalid device' });
+        if (salimitDevice.inUse) return res.json({ status: 'error', message: 'Salimit device already in use' });
+
+        const saline = await Saline.findById(salineId);
+        if (!saline) return res.json({ status: 'error', message: 'Invalid saline' });
+
+        const salineDetails = {
+            action: 'give',
+            salineId: saline._id,
+            dateTime: Date.now()
+        };
+
+        /*const updatedPatient = await Patient.updateOne({ _id: patient._id },
+            { $push: { salineHistory: salineDetails },
+            deviceId,
+            salineStatus: 'normal'
+        });*/
+
+        patient.salineHistory.push(salineDetails);
+        patient.deviceId = deviceId;
+        patient.salineStatus = 'normal';
+
+        patient.save();
+
+        //patient = await Patient.findOne({ wardNo, bedNo, discharged: false });
+
+        emitSalineStatus(patient);
+        
+        const updatedSalimitDevice = await SalimitDevice.findOneAndUpdate({ deviceId }, { inUse: true });
+
+        res.json({ status: 'success', patient });
+    } catch (err) {
+        console.log(err);
+        res.json({ status: 'error' });
+    }
+});
+
+// remove saline from patient
+app.get('/remove-saline/:id', async (req, res) => {
+    const patientId = req.params.id;
+
+    try {
+        const patient = await Patient.findOne({ patientId });
+        if (!patient) return res.json({ status: 'error', message: 'Invalid patient' });
+
+        const salineDetails = {
+            action: 'remove',
+            dateTime: Date.now()
+        };
+
+        /*const updatedPatient = await Patient.updateOne({ patientId },
+            { $push: { salineHistory: salineDetails },
+            deviceId: null,
+            salineStatus: null
+        });*/
+
+        const updatedSalimitDevice = await SalimitDevice.findOneAndUpdate({ deviceId: patient.deviceId }, { inUse: false });
+
+        patient.salineHistory.push(salineDetails);
+        patient.deviceId = null;
+        patient.salineStatus = null;
+
+        patient.save();
+
+        //patient = await Patient.findOne({ wardNo, bedNo, discharged: false });
+
+        emitSalineStatus(patient);
+
+        res.json({ status: 'success', patient });
+    } catch (err) {
+        console.log(err);
+        res.json({ status: 'error' });
+    }
+});
+
 const server = http.createServer(app);
 
 const io = socketio(server, {
@@ -51,7 +139,19 @@ const io = socketio(server, {
     }
 });
 
-require('./websocket-server').websocketServer(io);
+io.on('connection', socket => {
+    console.log('new socket connection');
+    
+    const wardNo = 'W' + socket.handshake.query.wardNo;
+
+    socket.join(wardNo);
+});
+
+function emitSalineStatus(patient) {
+    const wardNo = 'W' + patient.wardNo;
+
+    io.to(wardNo).emit('saline-status', patient);
+}
 
 /* app.get('/saline-status', (req, res) => {
     const { wardNo, bedNo, status, deviceId } = req.query;
