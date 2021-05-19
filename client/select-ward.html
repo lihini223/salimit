@@ -22,35 +22,37 @@
     <title>Salimit</title>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <nav>
-                <div class="nav-wrapper">
-                    <a href="index.html" class="brand-logo"><i class="material-icons">local_hospital</i>Salimit</a>
-                    <ul class="right hide-on-med-and-down">
-                        <li><a href="current-salines.html">Current Salines</a></li>
-                        <li><a href="select-ward.html">Select Ward</a></li>
-                        <li><a href="add-saline.html">Add Saline</a></li>
-                        <li><a href="add-device.html">Add Device</a></li>
-                        <li><a href="add-patient.html">Add Patient</a></li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-
-        <form id="wardSelectForm">
-            <div class="input-field col s12">
-                <select name="wardNo" id="wardSelect">
-                    <option value="" disabled selected>Select Ward No</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                </select>
-                <label>Ward No</label>
+    <header>
+        <nav>
+            <div class="container nav-wrapper">
+                <a href="index.html" class="brand-logo"><i class="material-icons">local_hospital</i>Salimit</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="current-salines.html">Current Salines</a></li>
+                    <li><a href="select-ward.html">Select Ward</a></li>
+                    <li><a href="add-saline.html">Add Saline</a></li>
+                    <li><a href="add-device.html">Add Device</a></li>
+                    <li><a href="add-patient.html">Add Patient</a></li>
+                </ul>
             </div>
-            <button type="submit" class="btn waves-effect waves-light">Go</button>
-        </form>
-    </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <form id="wardSelectForm">
+                <div class="input-field col s12">
+                    <select name="wardNo" id="wardSelect">
+                        <option value="" disabled selected>Select Ward No</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select>
+                    <label>Ward No</label>
+                </div>
+                <button type="submit" class="btn waves-effect waves-light">Go</button>
+            </form>
+        </div>
+    </main>
 
     <script>
         M.AutoInit();

@@ -4,6 +4,7 @@ const Saline = require('../models/Saline');
 
 const router = express.Router();
 
+// get all salines
 router.get('/', async (req, res) => {
     try {
         const salines = await Saline.find();
@@ -15,6 +16,7 @@ router.get('/', async (req, res) => {
     }
 });
 
+// get saline by id
 router.get('/:salineId', async (req, res) => {
     const salineId = req.params.salineId;
 
@@ -28,6 +30,8 @@ router.get('/:salineId', async (req, res) => {
     }
 });
 
+
+// add new saline
 router.post('/new', async (req, res) => {
     const { name, volume, details } = req.body;
 
@@ -49,6 +53,7 @@ router.post('/new', async (req, res) => {
     }
 });
 
+// edit saline
 router.post('/edit/:id', async (req, res) => {
     const salineId = req.params.id;
 
@@ -60,6 +65,7 @@ router.post('/edit/:id', async (req, res) => {
     }
 });
 
+// delete saline
 router.get('/delete/:id', async (req, res) => {
     const salineId = req.params.id;
 
