@@ -68,19 +68,11 @@ app.post('/add-saline', async (req, res) => {
             dateTime: Date.now()
         };
 
-        /*const updatedPatient = await Patient.updateOne({ _id: patient._id },
-            { $push: { salineHistory: salineDetails },
-            deviceId,
-            salineStatus: 'normal'
-        });*/
-
         patient.salineHistory.push(salineDetails);
         patient.deviceId = deviceId;
         patient.salineStatus = 'normal';
 
         patient.save();
-
-        //patient = await Patient.findOne({ wardNo, bedNo, discharged: false });
 
         emitSalineStatus(patient);
         
@@ -106,12 +98,6 @@ app.get('/remove-saline/:id', async (req, res) => {
             dateTime: Date.now()
         };
 
-        /*const updatedPatient = await Patient.updateOne({ patientId },
-            { $push: { salineHistory: salineDetails },
-            deviceId: null,
-            salineStatus: null
-        });*/
-
         const updatedSalimitDevice = await SalimitDevice.findOneAndUpdate({ deviceId: patient.deviceId }, { inUse: false });
 
         patient.salineHistory.push(salineDetails);
@@ -119,8 +105,6 @@ app.get('/remove-saline/:id', async (req, res) => {
         patient.salineStatus = null;
 
         patient.save();
-
-        //patient = await Patient.findOne({ wardNo, bedNo, discharged: false });
 
         emitSalineStatus(patient);
 
@@ -131,6 +115,25 @@ app.get('/remove-saline/:id', async (req, res) => {
     }
 });
 
+// request from saline device
+app.get('/saline-status', async (req, res) => {
+    const { wardNo, bedNo, salineStatus, deviceId } = req.query;
+    
+    try {
+        const patient = await Patient.findOne({ deviceId });
+
+        patient.salineStatus = salineStatus;
+
+        patient.save();
+
+        emitSalineStatus(patient);
+    } catch (err) {
+        console.log(err);
+    }
+
+    res.send('Success');
+});
+
 const server = http.createServer(app);
 
 const io = socketio(server, {
@@ -139,9 +142,7 @@ const io = socketio(server, {
     }
 });
 
-io.on('connection', socket => {
-    console.log('new socket connection');
-    
+io.on('connection', socket => {    
     const wardNo = 'W' + socket.handshake.query.wardNo;
 
     socket.join(wardNo);
@@ -152,19 +153,6 @@ function emitSalineStatus(patient) {
 
     io.to(wardNo).emit('saline-status', patient);
 }
-
-/* app.get('/saline-status', (req, res) => {
-    const { wardNo, bedNo, status, deviceId } = req.query;
-    console.log('New request to saline');
-    console.log(req.url);
-    console.log(wardNo);
-    console.log(bedNo);
-    console.log(status);
-    console.log(typeof wardNo);
-    console.log(typeof bedNo);
-    console.log(typeof status);
-    res.send('Success');
-}); */
 
 const PORT = process.env.PORT || 8081;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

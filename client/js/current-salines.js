@@ -30,8 +30,6 @@ const socket = io('http://localhost:8081', {
 });
 
 socket.on('saline-status', patient => {
-    console.log('socket event');
-    console.log(patient);
     changePatientSalineStatus(patient);
 });
 
@@ -43,8 +41,6 @@ function createPatientCards(patients) {
     patients.forEach(patient => {
         const patientCard = document.createElement('div');
         patientCard.setAttribute('id', patient.patientId);
-
-        console.log(typeof patient.patientId);
 
         patientCard.innerHTML = `
             <div class="row">
@@ -64,9 +60,18 @@ function createPatientCards(patients) {
 
 function changePatientSalineStatus(patient) {
     const patientElement = document.querySelector(`#${patient.patientId}`);
-    const patientSalineStatusElement = patientElement.querySelector('.saline-status');
 
-    patientSalineStatusElement.textContent = patient.salineStatus ? patient.salineStatus : 'No saline given';
+    patientElement.innerHTML = `
+        <div class="row">
+            <div class="col s12">
+                <div class="card blue">
+                    <p>Bed No: ${patient.bedNo}</p>
+                    <p class="saline-status">Saline Status: ${patient.salineStatus ? patient.salineStatus : 'No saline given'}</p>
+                    ${patient.salineStatus ? `<button type="button" class="btn" onclick="removeSaline('${patient.patientId}')">Remove Saline</button>` : ''}
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 async function addSaline() {
