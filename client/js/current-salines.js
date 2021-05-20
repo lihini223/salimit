@@ -46,9 +46,14 @@ function createPatientCards(patients) {
             <div class="row">
                 <div class="col s12">
                     <div class="card blue">
-                        <p>Bed No: ${patient.bedNo}</p>
-                        <p class="saline-status">Saline Status: ${patient.salineStatus ? patient.salineStatus : 'No saline given'}</p>
-                        ${patient.salineStatus ? `<button type="button" class="btn" onclick="removeSaline('${patient.patientId}')">Remove Saline</button>` : ''}
+                        <div class="row">
+                            <div class="col s6">
+                                <p>Bed No: ${patient.bedNo}</p>
+                            </div>
+                            <div class="col s6">
+                                <div style="width: 50px; height: 50px; border-radius: 50%;" class="right ${patient.salineStatus ? patient.salineStatus === 'normal' ? 'green' : 'red' : 'grey'}" onclick="removeSaline('${patient.patientId}')"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -65,9 +70,14 @@ function changePatientSalineStatus(patient) {
         <div class="row">
             <div class="col s12">
                 <div class="card blue">
-                    <p>Bed No: ${patient.bedNo}</p>
-                    <p class="saline-status">Saline Status: ${patient.salineStatus ? patient.salineStatus : 'No saline given'}</p>
-                    ${patient.salineStatus ? `<button type="button" class="btn" onclick="removeSaline('${patient.patientId}')">Remove Saline</button>` : ''}
+                    <div class="row">
+                        <div class="col s6">
+                            <p>Bed No: ${patient.bedNo}</p>
+                        </div>
+                        <div class="col s6">
+                            <div style="width: 50px; height: 50px; border-radius: 50%;" class="right ${patient.salineStatus ? patient.salineStatus === 'normal' ? 'green' : 'red' : 'grey'}" onclick="removeSaline('${patient.patientId}')"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,16 +109,12 @@ async function addSaline() {
     });
 
     const data = await res.json();
-
-    console.log(data);
 }
 
 async function removeSaline(patientId) {
     const res = await fetch(`${API_URL}/remove-saline/${patientId}`);
 
     const data = await res.json();
-
-    console.log(data);
 }
 
 async function getSalines() {

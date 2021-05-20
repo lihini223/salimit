@@ -117,16 +117,20 @@ app.get('/remove-saline/:id', async (req, res) => {
 
 // request from saline device
 app.get('/saline-status', async (req, res) => {
-    const { wardNo, bedNo, salineStatus, deviceId } = req.query;
+    const { deviceId, salineStatus, wardNo, bedNo } = req.query;
     
     try {
         const patient = await Patient.findOne({ deviceId });
 
-        patient.salineStatus = salineStatus;
+        if (patient) {
+            patient.salineStatus = salineStatus;
 
-        patient.save();
+            patient.save();
 
-        emitSalineStatus(patient);
+            emitSalineStatus(patient);
+        } else {
+            console.log('Patient with device ID not found.');
+        }
     } catch (err) {
         console.log(err);
     }
