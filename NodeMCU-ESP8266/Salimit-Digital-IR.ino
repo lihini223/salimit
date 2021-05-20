@@ -9,9 +9,9 @@ const char* host = "";
 // server port
 const int httpPort = 8081;
 
-const char* deviceId = "";
-const char* wardNo = "W10";
-const char* bedNo = "B20";
+const char* deviceId = "d4000";
+const char* wardNo = "";
+const char* bedNo = "";
 
 void setup() {
   // digital IR sensor input
@@ -57,12 +57,13 @@ void loop() {
     Serial.println("LOW");
     digitalWrite(LED_BUILTIN, LOW);
     salineLevelStatus = "reached";
+    sendSalineStatus(salineLevelStatus);
   }
 
-  sendSalineStatus(salineLevelStatus);
+  //sendSalineStatus(salineLevelStatus);
 
-  // run loop every 5 seconds
-  delay(5000);
+  // delay loop
+  delay(2000);
 }
 
 void sendSalineStatus(String salineLevelStatus) {
@@ -76,8 +77,9 @@ void sendSalineStatus(String salineLevelStatus) {
   }
 
   //String data = String(wardNo) + String(bedNo);
+  //String data = "?wardNo=" + String(wardNo) + "&bedNo=" + String(bedNo) + "&status=" + salineLevelStatus;
   String url = "/saline-status";
-  String data = "?wardNo=" + String(wardNo) + "&bedNo=" + String(bedNo) + "&status=" + salineLevelStatus;
+  String data = "?deviceId=" + String(deviceId) + "&salineStatus=" + salineLevelStatus;
 
   Serial.println("Requesting URL: " + url + data);
 
