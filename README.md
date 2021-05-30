@@ -16,6 +16,14 @@ Saline is given when patient’s body is dehydrated and the saline level in the 
 ## Current System
 Current system in hospitals is, they just give the saline to the patient and roughly record the time given. And manually monitor each patient who has been given saline. Nurses need to monitor saline level constantly to remove/ replace the saline bottle. Or else, patient’s caretaker needs to inform nurse about the saline level.
 
+## Basic flow of the developed system
+
+A nurse will give saline to patient and assign it to the relevant patient on the mobile app. And nurse input patient name, saline volume and saline dropping speed to the mobile app. Mobile app itself start a time countdown according to given inputs. The sensors will constantly monitor the saline level until it they detect the critical saline level. When saline level reaches the critical level, an alert will be sent to the mobile application and nurse station desktop app indicating the relevant patient. Also, nurse can set a timer through the mobile app for the patients who needs a special attention constantly. Patient details on giving saline is recorded in a cloud database every time a nurse give saline to a patient.
+
+There will be another special feature for the patients in the developed device which is an emergency buzzer. Patients or their care takers can easily push the buzzer when an emergency occurs such as saline needle pulled out from the patient’s hand or the nurse did not come on time to replace/ remove saline even if the alert sent to them already.
+
+The saline level will be detected by the IR/RFID sensors constantly and the sensor data is processed by a Node MCU. The Node MCU is connected to a web server. The mobile app, desktop app and cloud database are connected to the web server through a local WI-FI network. The Node MCU will send a request to the web server when the saline level reaches to the critical saline level. Then the alert will be sent to the mobile application and desktop application. Meanwhile the database is updated with the details of the patient, given saline volume, speed of the saline dropping and the time saline given.
+
 ## Devices 
 -	Node MCU esp8266
 -	IR sensors 
