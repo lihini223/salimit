@@ -6,3 +6,10 @@ In this project, a critical saline level is detected, and an alert will be sent 
 ## Definition of the problem 
 Saline is given when patient’s body is dehydrated and the saline level in the given bottle requires constant monitoring. The saline bottle needs to be replaced/remove immediately when the bottle is fully consumed. Otherwise, Blood rushes outward into the saline because of the pressure differential between the patient's blood pressure and the empty saline container. This kind of situations can lead to harmful threats to patient’s health. 
 
+## Project Objectives 
+-	Prevent patient’s blood rushing outwards.
+-	Nurse can monitor each patient saline.
+-	Nurse can track timing of each saline bottle that has been given to patients. 
+-	Nurse can set a timer for the patients who needs continuous attention.
+-	Develop a mobile app and a desktop/web app to monitor the live status of patient’s saline given. 
+
