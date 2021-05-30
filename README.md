@@ -1,1 +1,6 @@
 # salimit
+## Introduction
+This project is a saline level detection and alerting system. Saline is given when patient’s body is dehydrated and the saline level in the given bottle requires constant monitoring. As per the technology is growing Internet of Things (IOT) has become a major in the field. Since IOT connects electronic devices and other embedded items with software over the internet, this project came up as a IOT solution for the requirement of the constant saline level monitoring.
+In this project, a critical saline level is detected, and an alert will be sent to the nurse’s mobile application and to the nurse station. There will be a mobile application to track all the patients who has been given saline and nurse will be able to monitor each patient in the ward. When the system triggers an alert nurse can easily identify which patient’s saline is going to be finished. Also, nurse can set a timer for patients who need continuous attention after giving the saline. 
+
+
