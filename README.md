@@ -13,6 +13,9 @@ Saline is given when patient’s body is dehydrated and the saline level in the 
 -	Nurse can set a timer for the patients who needs continuous attention.
 -	Develop a mobile app and a desktop/web app to monitor the live status of patient’s saline given. 
 
+## Current System
+Current system in hospitals is, they just give the saline to the patient and roughly record the time given. And manually monitor each patient who has been given saline. Nurses need to monitor saline level constantly to remove/ replace the saline bottle. Or else, patient’s caretaker needs to inform nurse about the saline level.
+
 ## Devices 
 -	Node MCU esp8266
 -	IR sensors 
