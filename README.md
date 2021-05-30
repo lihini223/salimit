@@ -18,3 +18,7 @@ Saline is given when patient’s body is dehydrated and the saline level in the 
 -	IR sensors 
 -	RFID sensors
 
+## Tools and Technologies
+-	Arduino IDE
+-	C programming language to program the micro controller.
+-	Node JS for backend server
