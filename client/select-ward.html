@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salimit</title>
+</head>
+<body>
+    
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Salimit</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container nav-wrapper">
+                <a href="index.html" class="brand-logo"><i class="material-icons">local_hospital</i>Salimit</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="current-salines.html">Current Salines</a></li>
+                    <li><a href="select-ward.html">Select Ward</a></li>
+                    <li><a href="add-saline.html">Add Saline</a></li>
+                    <li><a href="add-device.html">Add Device</a></li>
+                    <li><a href="add-patient.html">Add Patient</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <ul class="sidenav" id="mobile-demo">
+            <li><a href="current-salines.html">Current Salines</a></li>
+            <li><a href="select-ward.html">Select Ward</a></li>
+            <li><a href="add-saline.html">Add Saline</a></li>
+            <li><a href="add-device.html">Add Device</a></li>
+            <li><a href="add-patient.html">Add Patient</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="container">
+            <form id="wardSelectForm">
+                <div class="input-field col s12">
+                    <select name="wardNo" id="wardSelect">
+                        <option value="" disabled selected>Select Ward No</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="30">40</option>
+                        <option value="30">50</option>
+                        <option value="30">60</option>
+                        <option value="30">65</option>
+                        <option value="30">70</option>
+                        <option value="30">75</option>
+                        <option value="30">80</option>
+                        <option value="30">90</option>
+                    </select>
+                    <label>Ward No</label>
+                </div>
+                <button type="submit" class="btn waves-effect waves-light">Go</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        M.AutoInit();
+
+        const wardSelectFormElement = document.querySelector('#wardSelectForm');
+        const wardSelectElement = document.querySelector('#wardSelect');
+
+        wardSelectFormElement.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const wardNo = wardSelectElement.value;
+
+            setWardNo(wardNo);
+
+            window.location = 'current-salines.html';
+        });
+
+        function setWardNo(wardNo) {
+            const currentDate = new Date();
+            currentDate.setTime(currentDate.getTime() + 2*24*60*60*1000);
+            const expires = 'expires='+ currentDate.toUTCString();
+            document.cookie = 'salimit-wardNo' + '=' + wardNo + ';' + expires + ';path=/';
+        }
+    </script>
+</body>
+</html>

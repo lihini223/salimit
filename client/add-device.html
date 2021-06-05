@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salimit</title>
+</head>
+<body>
+    
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
+    <script src="./js/add-device.js" defer></script>
+    <title>Salimit</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container nav-wrapper">
+                <a href="index.html" class="brand-logo"><i class="material-icons">local_hospital</i>Salimit</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="current-salines.html">Current Salines</a></li>
+                    <li><a href="select-ward.html">Select Ward</a></li>
+                    <li><a href="add-saline.html">Add Saline</a></li>
+                    <li><a href="add-device.html">Add Device</a></li>
+                    <li><a href="add-patient.html">Add Patient</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <ul class="sidenav" id="mobile-demo">
+            <li><a href="current-salines.html">Current Salines</a></li>
+            <li><a href="select-ward.html">Select Ward</a></li>
+            <li><a href="add-saline.html">Add Saline</a></li>
+            <li><a href="add-device.html">Add Device</a></li>
+            <li><a href="add-patient.html">Add Patient</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <form id="addDeviceForm" class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="deviceId" id="deviceId" class="validate">
+                            <label for="deviceId">Device ID</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn waves-effect waves-light">Add Device<i class="material-icons right">send</i></button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

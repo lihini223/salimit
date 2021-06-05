@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
+    <script src="https://cdn.socket.io/4.1.1/socket.io.min.js" integrity="sha384-cdrFIqe3RasCMNE0jeFG9xJHog/tgOVC1E9Lzve8LQN1g5WUHo0Kvk1mawWjxX7a" crossorigin="anonymous"></script>
+    <script src="./js/current-salines.js" defer></script>
+    <title>Salimit</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container nav-wrapper">
+                <a href="index.html" class="brand-logo"><i class="material-icons">local_hospital</i>Salimit</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="current-salines.html">Current Salines</a></li>
+                    <li><a href="select-ward.html">Select Ward</a></li>
+                    <li><a href="add-saline.html">Add Saline</a></li>
+                    <li><a href="add-device.html">Add Device</a></li>
+                    <li><a href="add-patient.html">Add Patient</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <ul class="sidenav" id="mobile-demo">
+            <li><a href="current-salines.html">Current Salines</a></li>
+            <li><a href="select-ward.html">Select Ward</a></li>
+            <li><a href="add-saline.html">Add Saline</a></li>
+            <li><a href="add-device.html">Add Device</a></li>
+            <li><a href="add-patient.html">Add Patient</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="center" onclick=""><a href="#addPatientSaline" class="modal-trigger" onclick="getSalines()"><i class="material-icons medium red-text">add_circle_outline</i></a></div>
+            <div id="patients"></div>
+        </div>
+    </main>
+
+    <div id="addPatientSaline" class="modal">
+        <div class="modal-content">
+            <form id="addPatientSalineForm" class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="number" name="bedNo" id="bedNo" class="validate">
+                        <label for="bedNo">Bed No</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="text" name="deviceId" id="deviceId" class="validate">
+                        <label for="deviceId">Device ID</label>
+                    </div>
+                </div>
+                <div class="">
+                    <select name="salineId" id="salineSelect"></select>
+                    <label>Ward No</label>
+                </div>
+                <button type="button" class="btn waves-effect waves-light" onclick="addSaline()">Add<i class="material-icons right">add</i></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close btn-flat">Close</a>
+        </div>
+    </div>
+</body>
+</html>
