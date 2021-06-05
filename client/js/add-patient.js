@@ -2,7 +2,7 @@ M.AutoInit();
 
 const addPatientFormElement = document.querySelector('#addPatientForm');
 
-const API_URL = 'http://localhost:8081';
+const API_URL = 'https://salimit-iot.herokuapp.com';
 
 addPatientFormElement.addEventListener('submit', async (e) => {
     e.preventDefault();

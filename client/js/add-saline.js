@@ -2,7 +2,7 @@ M.AutoInit();
 
 const addSalineFormElement = document.querySelector('#addSalineForm');
 
-const API_URL = 'http://localhost:8081';
+const API_URL = 'https://salimit-iot.herokuapp.com';
 
 addSalineFormElement.addEventListener('submit', async (e) => {
     e.preventDefault();

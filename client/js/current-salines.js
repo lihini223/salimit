@@ -2,7 +2,7 @@ M.AutoInit();
 
 const patientsElement = document.querySelector('#patients');
 
-const API_URL = 'http://localhost:8081';
+const API_URL = 'https://salimit-iot.herokuapp.com';
 
 function getWardNo() {
     const name = 'salimit-wardNo' + '=';
@@ -23,7 +23,7 @@ function getWardNo() {
 
 const wardNo = getWardNo();
 
-const socket = io('http://localhost:8081', {
+const socket = io('https://salimit-iot.herokuapp.com', {
     query: {
         wardNo: wardNo
     }

@@ -5,9 +5,9 @@ const char* ssid = "";
 // network password
 const char* password = "";
 // server address
-const char* host = "";
+const char* host = "https://salimit-iot.herokuapp.com";
 // server port
-const int httpPort = 8081;
+const int httpPort = 80;
 
 const char* deviceId = "d4000";
 const char* wardNo = "";

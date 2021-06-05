@@ -2,7 +2,7 @@ M.AutoInit();
 
 const addDeviceFormElement = document.querySelector('#addDeviceForm');
 
-const API_URL = 'http://localhost:8081';
+const API_URL = 'https://salimit-iot.herokuapp.com';
 
 addDeviceFormElement.addEventListener('submit', async (e) => {
     e.preventDefault();
