@@ -45,17 +45,23 @@ router.post('/new', async (req, res) => {
 });
 
 // get patient by id
-router.get('/:id', async (req, res) => {
+router.get('/details/:id', async (req, res) => {
     const patientId = req.params.id;
 
     try {
-        const patient = await Patient.findById(patientId);
+        const patient = await Patient.findOne({ patientId });
 
         let salineHistory = [];
 
         for (let i = 0; i < patient.salineHistory.length; i++) {
-            const saline = await Saline.findById(patient.salineHistory[i].salineId);
-            salineHistory.push(saline);
+            const salineDetails = { ...patient.salineHistory[i] };
+            
+            if (salineDetails.action === 'give') {
+                const saline = await Saline.findById(salineDetails.salineId);
+                salineDetails.saline = saline;
+            }
+            
+            salineHistory.push(salineDetails);
         }
 
         const patientDetails = {

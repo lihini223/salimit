@@ -48,7 +48,9 @@ function createPatientCards(patients) {
                     <div class="card blue">
                         <div class="row p-1">
                             <div class="col s6">
-                                <p class="bold">Bed No: ${patient.bedNo}</p>
+                                <p class="bold m-0">Bed No: ${patient.bedNo}</p>
+                                <p class="m-0">Patient ID: ${patient.patientId}</p>
+                                <p class="m-0">Name: ${patient.name}</p>
                             </div>
                             <div class="col s6">
                                 <div style="width: 50px; height: 50px; border-radius: 50%;" class="right ${patient.salineStatus ? patient.salineStatus === 'normal' ? 'green' : 'red' : 'grey'}" onclick="removeSaline('${patient.patientId}')"></div>
@@ -72,7 +74,9 @@ function changePatientSalineStatus(patient) {
                 <div class="card blue">
                     <div class="row p-1">
                         <div class="col s6">
-                            <p class="bold">Bed No: ${patient.bedNo}</p>
+                            <p class="bold m-0">Bed No: ${patient.bedNo}</p>
+                            <p class="m-0">Patient ID: ${patient.patientId}</p>
+                            <p class="m-0">Name: ${patient.name}</p>
                         </div>
                         <div class="col s6">
                             <div style="width: 50px; height: 50px; border-radius: 50%;" class="right ${patient.salineStatus ? patient.salineStatus === 'normal' ? 'green' : 'red' : 'grey'}" onclick="removeSaline('${patient.patientId}')"></div>
