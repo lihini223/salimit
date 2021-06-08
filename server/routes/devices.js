@@ -1,12 +1,13 @@
 const express = require('express');
 
+const { checkAuthenticated } = require('../config/auth');
 const SalimitDevice = require('../models/SalimitDevice');
 const Patient = require('../models/Patient');
 
 const router = express.Router();
 
 // get all devices
-router.get('/', async (req, res) => {
+router.get('/', checkAuthenticated, async (req, res) => {
     try {
         const devices = await SalimitDevice.find();
 
@@ -17,10 +18,13 @@ router.get('/', async (req, res) => {
 });
 
 // add new device
-router.post('/new', async (req, res) => {
+router.post('/new', checkAuthenticated, async (req, res) => {
     const { deviceId } = req.body;
 
     try {
+        const existingDevice = await SalimitDevice.findOne({ deviceId });
+        if (existingDevice) return res.json({ status: 'error', message: 'Device ID already exists' });
+        
         const salimitDevice = new SalimitDevice({
             deviceId
         });
@@ -30,7 +34,7 @@ router.post('/new', async (req, res) => {
         res.json({ status: 'success', salimitDevice: newSalimitDevice });
     } catch (err) {
         console.log(err);
-        res.json({ status: 'error' });
+        res.json({ status: 'error', message: 'Internal error' });
     }
 });
 

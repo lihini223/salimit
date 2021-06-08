@@ -1,11 +1,12 @@
 const express = require('express');
 
+const { checkAuthenticated } = require('../config/auth');
 const Saline = require('../models/Saline');
 
 const router = express.Router();
 
 // get all salines
-router.get('/', async (req, res) => {
+router.get('/', checkAuthenticated, async (req, res) => {
     try {
         const salines = await Saline.find();
 
@@ -17,7 +18,7 @@ router.get('/', async (req, res) => {
 });
 
 // get saline by id
-router.get('/:salineId', async (req, res) => {
+router.get('/:salineId', checkAuthenticated, async (req, res) => {
     const salineId = req.params.salineId;
 
     try {
@@ -32,7 +33,7 @@ router.get('/:salineId', async (req, res) => {
 
 
 // add new saline
-router.post('/new', async (req, res) => {
+router.post('/new', checkAuthenticated, async (req, res) => {
     const { name, volume, details } = req.body;
 
     try {
@@ -54,7 +55,7 @@ router.post('/new', async (req, res) => {
 });
 
 // edit saline
-router.post('/edit/:id', async (req, res) => {
+router.post('/edit/:id', checkAuthenticated, async (req, res) => {
     const salineId = req.params.id;
 
     try {
@@ -66,7 +67,7 @@ router.post('/edit/:id', async (req, res) => {
 });
 
 // delete saline
-router.get('/delete/:id', async (req, res) => {
+router.get('/delete/:id', checkAuthenticated, async (req, res) => {
     const salineId = req.params.id;
 
     try {

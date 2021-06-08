@@ -1,5 +1,6 @@
 const express = require('express');
 
+const { checkAuthenticated } = require('../config/auth');
 const Patient = require('../models/Patient');
 const SalimitDevice = require('../models/SalimitDevice');
 const Saline = require('../models/Saline');
@@ -7,7 +8,7 @@ const Saline = require('../models/Saline');
 const router = express.Router();
 
 // get all patients by ward no
-router.get('/:wardNo', async (req, res) => {
+router.get('/:wardNo', checkAuthenticated, async (req, res) => {
     const wardNo = req.params.wardNo;
 
     try {
@@ -16,17 +17,20 @@ router.get('/:wardNo', async (req, res) => {
         res.json({ status: 'success', patients });
     } catch (err) {
         console.log(err);
-        res.json({ status: 'error' });
+        res.json({ status: 'error', message: 'Internal error' });
     }
 });
 
 // add new patient
-router.post('/new', async (req, res) => {
+router.post('/new', checkAuthenticated, async (req, res) => {
     const { patientId, name, wardNo, bedNo } = req.body;
 
     try {
-        const existingPatient = await Patient.findOne({ wardNo, bedNo, discharged: false });
-        if (existingPatient) return res.json({ status: 'error', message: 'Bed is already taken' });
+        const existingPatient = await Patient.findOne({ patientId, discharged: false });
+        if (existingPatient) return res.json({ status: 'error', message: 'Patient ID already exists' });
+
+        const existingBed = await Patient.findOne({ wardNo, bedNo, discharged: false });
+        if (existingBed) return res.json({ status: 'error', message: 'Bed is already taken' });
         
         const patient = new Patient({
             patientId,
@@ -45,11 +49,12 @@ router.post('/new', async (req, res) => {
 });
 
 // get patient by id
-router.get('/details/:id', async (req, res) => {
+router.get('/details/:id', checkAuthenticated, async (req, res) => {
     const patientId = req.params.id;
 
     try {
         const patient = await Patient.findOne({ patientId });
+        if (!patient) return res.json({ status: 'error', message: 'Invalid patient' });
 
         let salineHistory = [];
 
@@ -72,12 +77,12 @@ router.get('/details/:id', async (req, res) => {
         res.json({ status: 'success', patient: patientDetails });
     } catch (err) {
         console.log(err);
-        res.json({ status: 'error' });
+        res.json({ status: 'error', message: 'Internal error' });
     }
 });
 
 // discharge patient
-router.get('/discharge/:id', async (req, res) => {
+router.get('/discharge/:id', checkAuthenticated, async (req, res) => {
     const patientId = req.params.id;
 
     try {
@@ -89,7 +94,7 @@ router.get('/discharge/:id', async (req, res) => {
         res.json({ status: 'success', patient: updatedPatient });
     } catch (err) {
         console.log(err);
-        res.json({ status: 'error' });
+        res.json({ status: 'error', message: 'Internal error' });
     }
 });
 

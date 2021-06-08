@@ -10,7 +10,7 @@ const PatientSchema = mongoose.Schema({
     name: requiredString,
     wardNo: {
         type: Number,
-        require: true
+        required: true
     },
     bedNo: {
         type: Number,

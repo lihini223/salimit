@@ -2,7 +2,33 @@ M.AutoInit();
 
 const patientsElement = document.querySelector('#patients');
 
-const API_URL = 'https://salimit-iot.herokuapp.com';
+const API_URL = 'https://salimit.herokuapp.com';
+
+function getToken() {
+    const name = 'salimit-token' + '=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+
+    return "";
+}
+
+function logout() {
+    document.cookie = 'salimit-token=;expires=Thu 01 Jan 1970 00:00:00UTC;path=/;';
+    window.location = 'index.html';
+}
+
+if (getToken() === '') {
+    window.location = 'index.html';
+}
 
 function getWardNo() {
     const name = 'salimit-wardNo' + '=';
@@ -23,7 +49,7 @@ function getWardNo() {
 
 const wardNo = getWardNo();
 
-const socket = io('https://salimit-iot.herokuapp.com', {
+const socket = io('https://salimit.herokuapp.com', {
     query: {
         wardNo: wardNo
     }
@@ -107,26 +133,61 @@ async function addSaline() {
     const res = await fetch(`${API_URL}/add-saline`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'salimit-token': getToken()
         },
         body: JSON.stringify(details)
     });
 
     const data = await res.json();
+
+    if (data.status === 'success') {
+        M.toast({
+            html: 'Saline has been added'
+        });
+    } else {
+        M.toast({
+            html: data.message
+        });
+    }
 }
 
 async function removeSaline(patientId) {
-    const res = await fetch(`${API_URL}/remove-saline/${patientId}`);
+    const res = await fetch(`${API_URL}/remove-saline/${patientId}`, {
+        headers: {
+            'salimit-token': getToken()
+        }
+    });
 
     const data = await res.json();
+
+    if (data.status === 'success') {
+        M.toast({
+            html: 'Saline has been removed'
+        });
+    } else {
+        M.toast({
+            html: data.message
+        });
+    }
 }
 
 async function getSalines() {
-    const res = await fetch(`${API_URL}/salines`);
+    const res = await fetch(`${API_URL}/salines`, {
+        headers: {
+            'salimit-token': getToken()
+        }
+    });
 
     const data = await res.json();
 
-    addSalinesToSelect(data.salines);
+    if (data.status === 'success') {
+        addSalinesToSelect(data.salines);
+    } else {
+        M.toast({
+            html: data.message
+        });
+    }
 }
 
 function addSalinesToSelect(salines) {
@@ -148,11 +209,21 @@ function addSalinesToSelect(salines) {
 }
 
 async function init() {
-    const res = await fetch(`${API_URL}/patients/${getWardNo()}`);
+    const res = await fetch(`${API_URL}/patients/${getWardNo()}`, {
+        headers: {
+            'salimit-token': getToken()
+        }
+    });
 
     const data = await res.json();
 
-    createPatientCards(data.patients);
+    if (data.status === 'success') {
+        createPatientCards(data.patients);
+    } else {
+        M.toast({
+            html: data.message
+        });
+    }
 }
 
 init();

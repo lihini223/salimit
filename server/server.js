@@ -9,6 +9,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const socketio = require('socket.io');
 
+const { checkAuthenticated } = require('./config/auth');
 const Patient = require('./models/Patient');
 const SalimitDevice = require('./models/SalimitDevice');
 const Saline = require('./models/Saline');
@@ -39,21 +40,25 @@ app.get('/', (req, res) => {
 const devicesRouter = require('./routes/devices');
 const salinesRouter = require('./routes/salines');
 const patientsRouter = require('./routes/patients');
+const adminsRouter = require('./routes/admins');
 
 // use route handlers
 app.use('/devices', devicesRouter);
 app.use('/salines', salinesRouter);
 app.use('/patients', patientsRouter);
+app.use('/admins', adminsRouter);
 
 //const { getAdmins, addAdmin } = require('./test/db');
 
 // add saline to patient
-app.post('/add-saline', async (req, res) => {
+app.post('/add-saline', checkAuthenticated, async (req, res) => {
     const { wardNo, bedNo, salineId, deviceId } = req.body;
 
     try {
         const patient = await Patient.findOne({ wardNo, bedNo, discharged: false });
         if (!patient) return res.json({ status: 'error', message: 'Invalid patient' });
+
+        if (patient.salineStatus) return res.json({ status: 'error', message: 'Patient has already been given a saline' });
 
         const salimitDevice = await SalimitDevice.findOne({ deviceId });
         if (!salimitDevice) return res.json({ status: 'error', message: 'Invalid device' });
@@ -86,12 +91,14 @@ app.post('/add-saline', async (req, res) => {
 });
 
 // remove saline from patient
-app.get('/remove-saline/:id', async (req, res) => {
+app.get('/remove-saline/:id', checkAuthenticated, async (req, res) => {
     const patientId = req.params.id;
 
     try {
         const patient = await Patient.findOne({ patientId });
         if (!patient) return res.json({ status: 'error', message: 'Invalid patient' });
+
+        if (!patient.salineStatus) return res.json({ status: 'error', message: 'No saline given to patient' });
 
         const salineDetails = {
             action: 'remove',

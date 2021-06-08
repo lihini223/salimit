@@ -7,10 +7,115 @@
     <title>Salimit</title>
 </head>
 <body>
-    <a href="current-salines.html">Current Salines</a>
     
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Salimit</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container nav-wrapper">
+                <a href="index.html" class="brand-logo"><i class="material-icons">local_hospital</i>Salimit</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <form id="loginForm" class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="email" name="email" id="email" class="validate" required>
+                            <label for="email">Email</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="password" name="password" id="password" class="validate" required>
+                            <label for="password">Password</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn waves-effect waves-light">Login</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
     <script>
-        window.location = 'select-ward.html';
+        M.AutoInit();
+
+        const loginFormElement = document.querySelector('#loginForm');
+
+        const API_URL = 'https://salimit.herokuapp.com';
+
+        function getToken() {
+            const name = 'salimit-token' + '=';
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+
+            return "";
+        }
+
+        if (getToken() !== '') {
+            window.location = 'select-ward.html';
+        }
+
+        loginFormElement.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(loginFormElement);
+
+            const details = {
+                email: formData.get('email'),
+                password: formData.get('password')
+            }
+
+            const res = await fetch(`${API_URL}/admins/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(details)
+            });
+
+            const data = await res.json();
+
+            if (data.status === 'success') {
+                setToken(data.token);
+                window.location = 'select-ward.html';
+            } else {
+                M.toast({
+                    html: data.message
+                });
+            }
+        });
+
+        function setToken(token) {
+            const currentDate = new Date();
+            currentDate.setTime(currentDate.getTime() + 2*24*60*60*1000);
+            const expires = 'expires='+ currentDate.toUTCString();
+            document.cookie = 'salimit-token' + '=' + token + ';' + expires + ';path=/';
+        }
     </script>
 </body>
 </html>

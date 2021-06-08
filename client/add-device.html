@@ -35,6 +35,7 @@
                     <li><a href="add-device.html">Add Device</a></li>
                     <li><a href="add-patient.html">Add Patient</a></li>
                     <li><a href="patient-details.html">Patient Details</a></li>
+                    <li><a onclick="logout()">Logout</a></li>
                 </ul>
             </div>
         </nav>
@@ -46,6 +47,7 @@
             <li><a href="add-device.html">Add Device</a></li>
             <li><a href="add-patient.html">Add Patient</a></li>
             <li><a href="patient-details.html">Patient Details</a></li>
+            <li><a onclick="logout()">Logout</a></li>
         </ul>
     </header>
 
@@ -55,7 +57,7 @@
                 <form id="addDeviceForm" class="col s12">
                     <div class="row">
                         <div class="input-field col s12">
-                            <input type="text" name="deviceId" id="deviceId" class="validate">
+                            <input type="text" name="deviceId" id="deviceId" class="validate" required>
                             <label for="deviceId">Device ID</label>
                         </div>
                     </div>
