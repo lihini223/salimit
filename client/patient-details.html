@@ -18,8 +18,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="./css/styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
-    <script src="./js/add-device.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="./js/patient-details.js" defer></script>
     <title>Salimit</title>
 </head>
 <body>
@@ -54,16 +54,18 @@
     <main>
         <div class="container">
             <div class="row">
-                <form id="addDeviceForm" class="col s12">
+                <form id="patientDetailsForm" class="col s12">
                     <div class="row">
                         <div class="input-field col s12">
-                            <input type="text" name="deviceId" id="deviceId" class="validate" required>
-                            <label for="deviceId">Device ID</label>
+                            <input type="text" name="patientId" id="patientId" class="validate">
+                            <label for="patientId">Patient ID</label>
                         </div>
                     </div>
-                    <button type="submit" class="btn waves-effect waves-light">Add Device<i class="material-icons right">send</i></button>
+                    <button type="submit" class="btn waves-effect waves-light">Get Patient Details</button>
                 </form>
             </div>
+
+            <div id="patientDetails"></div>
         </div>
     </main>
 </body>
